@@ -7,7 +7,9 @@ let socket;
 const Chat = ({location}) => {
     const [name, setName] = useState('');
     const [room, setRoom] = useState('');
-    const ENDPOINT = 'localhost:5000'
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState('');
+    const ENDPOINT = 'localhost:5000';
 
     useEffect(() => {
         const {name, room} = queryString.parse(location.search);
@@ -27,6 +29,14 @@ const Chat = ({location}) => {
             socket.off();
         }
     }, [ENDPOINT, location.search]);
+
+    useEffect(() => {
+        socket.on('message', (message) => {
+            setMessages([...messages, message]);
+        })
+    }, [messages]);
+
+    // function for sending messages
 
     return (
         <h1>Chat</h1>
